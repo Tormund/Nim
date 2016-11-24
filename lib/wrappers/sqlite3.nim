@@ -110,7 +110,7 @@ type
 
   Callback* = proc (para1: pointer, para2: int32, para3,
                      para4: cstringArray): int32{.cdecl.}
-  Tbind_destructor_func* = proc (para1: pointer){.cdecl.}
+  Tbind_destructor_func* = proc (para1: pointer){.cdecl, locks: 0, tags: [].}
   Create_function_step_func* = proc (para1: Pcontext, para2: int32,
                                       para3: PValueArg){.cdecl.}
   Create_function_func_func* = proc (para1: Pcontext, para2: int32,
@@ -130,7 +130,7 @@ type
 
 const
   SQLITE_STATIC* = nil
-  SQLITE_TRANSIENT* = cast[Tbind_destructor_func](- 1)
+  SQLITE_TRANSIENT* = cast[Tbind_destructor_func](-1)
 
 proc close*(para1: PSqlite3): int32{.cdecl, dynlib: Lib, importc: "sqlite3_close".}
 proc exec*(para1: PSqlite3, sql: cstring, para3: Callback, para4: pointer,
